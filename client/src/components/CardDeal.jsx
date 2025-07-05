@@ -10,7 +10,7 @@ const CardDeal = () => (
         your expenses.
       </h2>
       <p className={`${styles.paragraph} max-w-[470px] mt-5`}>
-        Finding the right credit card can be overwhelming, but with Expensync, you can track all your spending in one place. Choose the card that helps you maximize rewards, build credit, and stay on top of your finances — all in real-time.
+        Finding the right credit card can be overwhelming, but with Budget Buddy, you can track all your spending in one place. Choose the card that helps you maximize rewards, build credit, and stay on top of your finances — all in real-time.
       </p>
 
       <Button styles={`mt-10`} />

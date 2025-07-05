@@ -2,7 +2,9 @@ import React, { useEffect, useState } from "react";
 import ExpenseChart from "./ExpenseChart";
 import ExpenseCategoryChart from "./ExpenseCategoryChart";
 import { motion } from "framer-motion";
+import { BarChart3, PieChart, TrendingUp } from "lucide-react";
 import Layout from "./Layout";
+import PageHeader from "./PageHeader";
 import axios from "axios";
 
 const Charts = () => {
@@ -14,7 +16,7 @@ const Charts = () => {
         const fetchData = async () => {
             try {
                 const token = localStorage.getItem("token");
-                const res = await axios.get("https://expensync-ex0w.onrender.com/api/transactions", {
+                const res = await axios.get("http://localhost:3001/api/transactions", {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
@@ -44,15 +46,13 @@ const Charts = () => {
 
     return (
         <Layout>
-            <div className="rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden bg-gradient-to-b from-slate-50 to-white dark:from-[#0c0f1c] dark:to-[#1a1d2e] p-6 sm:p-10 space-y-10">
-                <div className="text-center">
-                    <h2 className="text-4xl sm:text-5xl font-bold tracking-tight text-[#1E2A45] dark:text-white drop-shadow">
-                        Financial Dashboard
-                    </h2>
-                    <p className="mt-4 text-lg sm:text-xl text-slate-700 dark:text-slate-400 max-w-2xl mx-auto">
-                        A visual glance at your income and spending patterns.
-                    </p>
-                </div>
+            <PageHeader 
+                title="Analytics" 
+                subtitle="Visual insights into your income and spending patterns" 
+                icon={BarChart3}
+                gradient="from-indigo-600 via-purple-600 to-pink-600"
+            />
+            <div className="rounded-3xl shadow-2xl backdrop-blur-xl bg-white/10 dark:bg-white/5 border border-white/20 dark:border-white/10 overflow-hidden p-6 sm:p-10 space-y-10 hover:bg-white/20 dark:hover:bg-white/10 transition-all duration-300">
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     <motion.div
@@ -61,7 +61,12 @@ const Charts = () => {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.1, duration: 0.6 }}
                     >
-                        <h3 className="text-xl font-semibold text-[#1E2A45] dark:text-white mb-4">Income vs Expense</h3>
+                        <div className="flex items-center gap-3 mb-4">
+                            <div className="p-2 rounded-lg backdrop-blur-md bg-gradient-to-r from-green-500/20 to-red-500/20 border border-white/30">
+                                <TrendingUp className="w-5 h-5 text-green-600 dark:text-green-400" />
+                            </div>
+                            <h3 className="text-xl font-semibold text-[#1E2A45] dark:text-white">Income vs Expense</h3>
+                        </div>
                         <ExpenseChart totalIncome={totalIncome} totalExpense={totalExpense} />
                     </motion.div>
 
@@ -71,7 +76,12 @@ const Charts = () => {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.2, duration: 0.6 }}
                     >
-                        <h3 className="text-xl font-semibold text-[#1E2A45] dark:text-white mb-4">Spending by Category</h3>
+                        <div className="flex items-center gap-3 mb-4">
+                            <div className="p-2 rounded-lg backdrop-blur-md bg-gradient-to-r from-blue-500/20 to-purple-500/20 border border-white/30">
+                                <PieChart className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                            </div>
+                            <h3 className="text-xl font-semibold text-[#1E2A45] dark:text-white">Spending by Category</h3>
+                        </div>
                         <ExpenseCategoryChart transactions={transactions} />
                     </motion.div>
                 </div>

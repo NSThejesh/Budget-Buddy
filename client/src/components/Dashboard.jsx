@@ -13,6 +13,7 @@ import BudgetGoalProgress from "./BudgetGoalProgress";
 import DebtOverview from "./DebtOverview";
 import NetWorthCard from "./NetWorthCard";
 import Layout from "./Layout";
+import PageHeader from "./PageHeader";
 
 const Dashboard = () => {
     const [userId, setUserId] = useState(null);
@@ -43,7 +44,7 @@ const Dashboard = () => {
         };
 
         // Fetch the transaction summary
-        axios.get("https://expensync-ex0w.onrender.com/api/summary/summary", { headers })
+        axios.get("http://localhost:3001/api/summary/summary", { headers })
             .then(response => {
                 const { totalIncome, totalExpenses } = response.data;
                 setTotalIncome(totalIncome);
@@ -52,7 +53,7 @@ const Dashboard = () => {
             .catch(err => console.error("Summary Error:", err));
 
         // Fetch all transactions for the user
-        axios.get("https://expensync-ex0w.onrender.com/api/transactions", { headers })
+        axios.get("http://localhost:3001/api/transactions", { headers })
             .then(res => {
                 setTransactions(res.data)
                 console.log("Without setTransactions",res.data)
@@ -61,7 +62,7 @@ const Dashboard = () => {
             .catch(err => console.error("Transaction Error:", err));
 
         // Fetch budget goals for the user
-        axios.get("https://expensync-ex0w.onrender.com/api/category-goals", { headers })
+        axios.get("http://localhost:3001/api/category-goals", { headers })
             .then(res => {
                 setBudgetGoals(res.data.categoryGoals),
                 console.log(res.data)
@@ -69,7 +70,7 @@ const Dashboard = () => {
             .catch(err => console.error("Budget Error:", err));
 
         // Fetch debts for the user
-        axios.get("https://expensync-ex0w.onrender.com/api/debts", { headers })
+        axios.get("http://localhost:3001/api/debts", { headers })
             .then(res => setDebts(res.data))
             .catch(err => console.error("Debt Error:", err));
 
@@ -100,12 +101,15 @@ const Dashboard = () => {
     
     return (
         <Layout>
-            <div className={`p-8 transition-all duration-500 ease-in-out relative ${showModal ? "blur-sm pointer-events-none" : ""} 
-                bg-gradient-to-b from-slate-50 to-white dark:from-[#0c0f1c] dark:to-[#1a1d2e]
-                text-slate-800 dark:text-white rounded-3xl shadow-xl sm:px-10`}>
-                <h2 className="text-4xl font-extrabold mb-12 text-center md:text-left tracking-tight">
-                    Your Financial Overview
-                </h2>
+            <PageHeader 
+                title="Dashboard" 
+                subtitle="Your complete financial overview at a glance" 
+                icon={Wallet}
+                gradient="from-green-600 via-blue-600 to-purple-600"
+            />
+            <div className={`p-4 lg:p-8 transition-all duration-500 ease-in-out relative ${showModal ? "blur-sm pointer-events-none" : ""} 
+                bg-white dark:bg-slate-800
+                text-slate-800 dark:text-white rounded-3xl shadow-lg border border-gray-200 dark:border-slate-700`}>
 
                 {/* Top Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
@@ -125,7 +129,7 @@ const Dashboard = () => {
                         icon: <ArrowDownRight className="w-8 h-8 text-red-500" />,
                         textColor: "text-red-500",
                     }].map(({ title, amount, icon, textColor }, idx) => (
-                        <div key={idx} className="p-6 rounded-2xl bg-gradient-to-tr from-slate-100/60 to-slate-200/60 dark:from-[#0c0f1c] dark:to-[#1a1d2e] shadow-xl border border-slate-200 dark:border-slate-700 transform hover:scale-[1.05] transition-all duration-300 ease-in-out">
+                        <div key={idx} className="p-6 rounded-2xl bg-gray-50 dark:bg-slate-700 border border-gray-200 dark:border-slate-600 shadow-lg transform hover:scale-[1.05] hover:bg-gray-100 dark:hover:bg-slate-600 transition-all duration-300 ease-in-out">
                             <div className="flex items-center justify-between mb-6">
                                 <h3 className="text-xl font-semibold">{title}</h3>
                                 {icon}
@@ -166,7 +170,7 @@ const Dashboard = () => {
                     <h4 className="text-xl font-semibold mb-6">Recent Transactions</h4>
                     <ul className="space-y-4">
                         {transactions.slice(0, 3).map((tx, idx) => (
-                            <li key={idx} className="flex justify-between items-center text-sm bg-slate-100 dark:bg-slate-800 px-6 py-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-200">
+                            <li key={idx} className="flex justify-between items-center text-sm bg-gray-50 dark:bg-slate-700 border border-gray-200 dark:border-slate-600 px-6 py-4 rounded-lg shadow-md hover:shadow-lg hover:bg-gray-100 dark:hover:bg-slate-600 transition-all duration-200">
                                 <span className="font-semibold">{tx.category}</span>
                                 <span className={tx.amount > 0 ? "text-green-500" : "text-red-500"}>
                                     ₹{tx.amount !== undefined && tx.amount !== null ? tx.amount.toLocaleString() : "0"}
@@ -189,13 +193,13 @@ const Dashboard = () => {
             </div>
 
             {/* Floating Add Button */}
-            <button onClick={() => setShowModal(true)} className="fixed bottom-8 right-8 bg-blue-600 hover:bg-blue-700 text-white p-6 rounded-full shadow-2xl z-50 transition-all duration-300">
+            <button onClick={() => setShowModal(true)} className="fixed bottom-8 right-8 bg-blue-600 hover:bg-blue-700 text-white p-6 rounded-full shadow-xl z-50 hover:scale-110 transition-all duration-300">
                 <Plus className="w-8 h-8" />
             </button>
 
             {/* Modal for Add Transaction */}
             {showModal && userId && (
-                <div className="fixed inset-0 z-40 bg-white/30 dark:bg-slate-800/30 backdrop-blur-md flex items-center justify-center p-6" onClick={() => setShowModal(false)}>
+                <div className="fixed inset-0 z-40 bg-black/50 flex items-center justify-center p-6" onClick={() => setShowModal(false)}>
                     <div className="w-full max-w-2xl" onClick={(e) => e.stopPropagation()}>
                         <AddTransaction userId={userId} onSuccess={() => setShowModal(false)} />
                     </div>

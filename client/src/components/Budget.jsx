@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { motion } from "framer-motion";
+import { Target, PiggyBank, TrendingUp, TrendingDown, Wallet, Save } from "lucide-react";
 import Layout from "./Layout";
+import PageHeader from "./PageHeader";
 
 // Category Budget Goals Subcomponent
 const CategoryBudgetGoals = ({ goals, setGoals }) => {
@@ -22,7 +24,7 @@ const CategoryBudgetGoals = ({ goals, setGoals }) => {
             }));
 
             const response = await axios.post(
-                "https://expensync-ex0w.onrender.com/api/category-goals/set",
+                "http://localhost:3001/api/category-goals/set",
                 { categoryGoals },
                 {
                     headers: {
@@ -43,10 +45,15 @@ const CategoryBudgetGoals = ({ goals, setGoals }) => {
     const totalBudget = Object.values(goals).reduce((sum, val) => sum + (parseInt(val) || 0), 0); // Ensure the value is a number
 
     return (
-        <div className="mt-15 bg-gradient-to-b from-slate-100/60 to-slate-200/60 dark:from-[#0c0f1c] dark:to-[#1a1d2e] border border-slate-200 dark:border-slate-700 p-8 rounded-3xl shadow-xl w-full">
-            <h3 className="text-2xl font-bold text-center text-slate-800 dark:text-white mb-6 tracking-tight">
-                🎯 Set Category-wise Budget Goals
-            </h3>
+        <div className="mt-15 backdrop-blur-xl bg-white/10 dark:bg-white/5 border border-white/20 dark:border-white/10 p-8 rounded-3xl shadow-2xl w-full hover:bg-white/20 dark:hover:bg-white/10 transition-all duration-300">
+            <div className="flex items-center justify-center gap-3 mb-6">
+                <div className="p-2 rounded-xl backdrop-blur-md bg-gradient-to-r from-green-500/20 to-blue-500/20 border border-white/30">
+                    <Target className="w-6 h-6 text-green-600 dark:text-green-400" />
+                </div>
+                <h3 className="text-2xl font-bold text-slate-800 dark:text-white tracking-tight">
+                    Set Category-wise Budget Goals
+                </h3>
+            </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {defaultCategories.map((category) => (
@@ -57,7 +64,7 @@ const CategoryBudgetGoals = ({ goals, setGoals }) => {
                             min={0}
                             value={goals[category] || 0}
                             onChange={(e) => handleChange(category, e.target.value)}
-                            className="w-full px-4 py-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-800 dark:text-white transition-all"
+                            className="w-full px-4 py-3 rounded-xl backdrop-blur-md bg-white/20 dark:bg-white/10 border border-white/30 dark:border-white/20 focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-800 dark:text-white transition-all duration-300 hover:bg-white/30 dark:hover:bg-white/20"
                             placeholder="₹0"
                         />
                     </div>
@@ -72,8 +79,9 @@ const CategoryBudgetGoals = ({ goals, setGoals }) => {
             <div className="mt-6 text-center">
                 <button
                     onClick={handleSave}
-                    className="px-6 py-3 bg-indigo-600 text-white rounded-xl shadow-lg hover:bg-indigo-700 transition-all"
+                    className="flex items-center gap-2 px-6 py-3 backdrop-blur-md bg-gradient-to-r from-indigo-500/80 to-blue-500/80 border border-white/30 text-white rounded-xl shadow-lg hover:from-indigo-600/90 hover:to-blue-600/90 hover:scale-105 transition-all duration-300"
                 >
+                    <Save className="w-4 h-4" />
                     Save Goals
                 </button>
             </div>
@@ -87,19 +95,28 @@ const Budget = () => {
     const [totalIncome, setTotalIncome] = useState(0);
     const [totalExpenses, setTotalExpenses] = useState(0);
     const [goals, setGoals] = useState({});
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
+                setLoading(true);
+                setError(null);
                 const token = localStorage.getItem("token");
 
+                if (!token) {
+                    window.location.href = "/login";
+                    return;
+                }
+
                 const [summaryRes, goalsRes] = await Promise.all([
-                    axios.get("https://expensync-ex0w.onrender.com/api/summary/summary", {
+                    axios.get("http://localhost:3001/api/summary/summary", {
                         headers: {
                             Authorization: `Bearer ${token}`,
                         },
                     }),
-                    axios.get("https://expensync-ex0w.onrender.com/api/category-goals/", {
+                    axios.get("http://localhost:3001/api/category-goals/", {
                         headers: {
                             Authorization: `Bearer ${token}`,
                         },
@@ -116,10 +133,16 @@ const Budget = () => {
                     return acc;
                 }, {});
                 setGoals(formattedGoals);
-                // setGoals(goalsRes.data || {}); // Set the initial goals
             } catch (err) {
                 console.error("Failed to fetch budget data:", err);
-                alert("Failed to fetch data. Please try again later.");
+                if (err.response?.status === 401) {
+                    localStorage.removeItem("token");
+                    window.location.href = "/login";
+                } else {
+                    setError("Failed to fetch data. Please try again later.");
+                }
+            } finally {
+                setLoading(false);
             }
         };
 
@@ -130,28 +153,74 @@ const Budget = () => {
     const remainingBudget = budget - totalExpenses;
     const expensePercentage = Math.min((totalExpenses / budget) * 100, 100);
 
+    if (loading) {
+        return (
+            <Layout>
+                <div className="bg-gradient-to-b from-slate-50 to-white dark:from-[#0c0f1c] dark:to-[#1a1d2e] border border-slate-200 dark:border-slate-700 p-10 rounded-3xl shadow-xl flex items-center justify-center min-h-[400px]">
+                    <div className="text-center">
+                        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+                        <p className="text-slate-600 dark:text-slate-400">Loading your budget data...</p>
+                    </div>
+                </div>
+            </Layout>
+        );
+    }
+
+    if (error) {
+        return (
+            <Layout>
+                <div className="bg-gradient-to-b from-slate-50 to-white dark:from-[#0c0f1c] dark:to-[#1a1d2e] border border-slate-200 dark:border-slate-700 p-10 rounded-3xl shadow-xl flex items-center justify-center min-h-[400px]">
+                    <div className="text-center">
+                        <div className="text-red-500 text-4xl mb-4">⚠️</div>
+                        <p className="text-red-600 dark:text-red-400 mb-4">{error}</p>
+                        <button 
+                            onClick={() => window.location.reload()} 
+                            className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all"
+                        >
+                            Retry
+                        </button>
+                    </div>
+                </div>
+            </Layout>
+        );
+    }
+
     return (
         <Layout>
-            <div className="bg-gradient-to-b from-slate-50 to-white dark:from-[#0c0f1c] dark:to-[#1a1d2e] border border-slate-200 dark:border-slate-700 p-10 rounded-3xl shadow-xl flex flex-col md:flex-row gap-10">
+            <PageHeader 
+                title="Budget Management" 
+                subtitle="Track your spending and manage your budget goals" 
+                icon={Target}
+                gradient="from-purple-600 via-pink-600 to-indigo-600"
+            />
+            <div className="backdrop-blur-xl bg-white/10 dark:bg-white/5 border border-white/20 dark:border-white/10 p-10 rounded-3xl shadow-2xl flex flex-col md:flex-row gap-10 hover:bg-white/20 dark:hover:bg-white/10 transition-all duration-300">
                 {/* Left Section (Budget Snapshot) */}
                 <div className="w-full md:w-2/3">
-                    <h2 className="text-4xl font-extrabold text-center text-slate-800 dark:text-white mb-12 tracking-tight">
-                        💸 Monthly Budget Snapshot
-                    </h2>
+                    <div className="flex items-center justify-center gap-4 mb-12">
+                        <div className="p-3 rounded-2xl backdrop-blur-md bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-white/30">
+                            <PiggyBank className="w-8 h-8 text-purple-600 dark:text-purple-400" />
+                        </div>
+                        <h2 className="text-4xl font-extrabold text-slate-800 dark:text-white tracking-tight">
+                            Monthly Budget Snapshot
+                        </h2>
+                    </div>
 
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center mb-10">
                         {[{
-                            label: "Budget", value: budget, color: "text-slate-900 dark:text-white"
+                            label: "Budget", value: budget, color: "text-slate-900 dark:text-white", icon: Wallet
                         }, {
-                            label: "Income", value: totalIncome, color: "text-green-600 dark:text-green-400"
+                            label: "Income", value: totalIncome, color: "text-green-600 dark:text-green-400", icon: TrendingUp
                         }, {
-                            label: "Expenses", value: totalExpenses, color: "text-red-500 dark:text-red-400"
+                            label: "Expenses", value: totalExpenses, color: "text-red-500 dark:text-red-400", icon: TrendingDown
                         }, {
-                            label: "Savings", value: savings, color: "text-blue-600 dark:text-blue-400"
-                        }].map(({ label, value, color }) => (
+                            label: "Savings", value: savings, color: "text-blue-600 dark:text-blue-400", icon: PiggyBank
+                        }].map(({ label, value, color, icon: Icon }) => (
                             <div key={label}
-                                className="bg-gradient-to-tr from-white/60 to-slate-200/60 dark:from-slate-800/60 dark:to-slate-700/60 backdrop-blur-md border border-slate-200 dark:border-slate-700 p-6 rounded-2xl hover:shadow-lg transition-all"
+                                className="backdrop-blur-xl bg-white/20 dark:bg-white/5 border border-white/30 dark:border-white/10 p-6 rounded-2xl hover:bg-white/30 dark:hover:bg-white/10 hover:shadow-2xl hover:scale-105 transition-all duration-300"
                             >
+                                <div className="flex items-center justify-center mb-3">
+                                    <Icon className={`w-6 h-6 ${color}`} />
+                                </div>
                                 <p className="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400 font-medium mb-2">{label}</p>
                                 <p className={`text-2xl font-bold ${color}`}>₹{value}</p>
                             </div>
@@ -173,7 +242,7 @@ const Budget = () => {
                         </span>
                     </div>
 
-                    <div className="mt-6 bg-gradient-to-tr from-white/60 to-slate-200/60 dark:from-slate-800/60 dark:to-slate-700/60 backdrop-blur-md p-6 rounded-xl text-center shadow-sm">
+                    <div className="mt-6 backdrop-blur-xl bg-white/20 dark:bg-white/5 border border-white/30 dark:border-white/10 p-6 rounded-xl text-center shadow-lg hover:bg-white/30 dark:hover:bg-white/10 transition-all duration-300">
                         <p className="text-sm text-slate-500 dark:text-slate-400 mb-1">💡 Smart Tip</p>
                         <p className="text-sm font-medium text-slate-700 dark:text-slate-300">
                             Keep expenses under <span className="font-semibold text-indigo-600 dark:text-indigo-400">70%</span> of your budget for consistent savings!

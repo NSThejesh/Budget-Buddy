@@ -14,12 +14,13 @@ const Button = ({ styles }) => {
       onClick={handleClick} // Set onClick to trigger navigation
       className={`
         py-4 px-6 font-poppins font-medium text-[18px]
-        text-white dark:text-black 
-        bg-[linear-gradient(135deg,_#00aaff,_#38bdf8)] 
-        dark:bg-[linear-gradient(135deg,_#00f6ff,_#38bdf8)] 
+        text-white backdrop-blur-md bg-gradient-to-r from-blue-500/80 to-cyan-500/80
+        dark:from-blue-400/80 dark:to-cyan-400/80
+        border border-white/30 dark:border-white/20
         rounded-[10px] outline-none 
         transition-all duration-300 
-        hover:brightness-110 hover:shadow-md 
+        hover:bg-gradient-to-r hover:from-blue-600/90 hover:to-cyan-600/90
+        hover:shadow-2xl hover:scale-105
         ${styles}
       `}
     >

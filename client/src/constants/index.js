@@ -47,7 +47,7 @@ export const feedback = [
     {
       id: "feedback-1",
       content:
-        "Expensync has truly simplified the way I manage my finances. It's not just a tracker; it's a personal finance assistant that helps me make smarter money decisions.",
+        "Budget Buddy has truly simplified the way I manage my finances. It's not just a tracker; it's a personal finance assistant that helps me make smarter money decisions.",
       name: "Sunidhi ",
       title: "Freelancer & Budget Planner",
       img: people01,
@@ -55,7 +55,7 @@ export const feedback = [
     {
       id: "feedback-2",
       content:
-        "I’ve tried several finance apps, but none are as intuitive and easy to use as Expensync. I can track my expenses and savings goals in just a few clicks.",
+        "I've tried several finance apps, but none are as intuitive and easy to use as Budget Buddy. I can track my expenses and savings goals in just a few clicks.",
       name: "Arpit Nayak",
       title: "Student & Budget Enthusiast",
       img: people02,
@@ -63,7 +63,7 @@ export const feedback = [
     {
       id: "feedback-3",
       content:
-        "As a small business owner, Expensync has helped me organize my business finances and stay on top of expenses. I can't imagine managing my finances without it.",
+        "As a small business owner, Budget Buddy has helped me organize my business finances and stay on top of expenses. I can't imagine managing my finances without it.",
       name: "Suraj Kumar",
       title: "Small Business Owner",
       img: people03,

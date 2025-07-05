@@ -1,4 +1,4 @@
-const BASE_URL = "https://expensync-ex0w.onrender.com/api";
+const BASE_URL = "http://localhost:3001/api";
 import axios from "axios";
 
 // Get token from localStorage
@@ -13,6 +13,13 @@ const authHeaders = () => ({
 // Helper to handle response errors
 const handleResponse = async (response) => {
   if (!response.ok) {
+    // Handle 401 Unauthorized errors
+    if (response.status === 401) {
+      localStorage.removeItem("token");
+      window.location.href = "/login";
+      throw new Error("Authentication failed. Please login again.");
+    }
+    
     let errorText;
     try {
       errorText = await response.text();

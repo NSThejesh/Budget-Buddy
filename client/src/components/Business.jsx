@@ -6,9 +6,8 @@ const FeatureCard = ({ icon, title, content, index }) => (
     <div
       className={`flex flex-row p-6 rounded-[20px] ${
         index !== features.length - 1 ? "mb-6" : "mb-0"
-      } feature-card transition-all duration-300
-        hover:bg-[linear-gradient(135deg,_#d0f0ff,_#f4f7fa)]
-        dark:hover:bg-[linear-gradient(135deg,_#003344,_#00040f)]`}
+      } feature-card transition-all duration-300 backdrop-blur-xl bg-white/10 dark:bg-white/5 border border-white/20 dark:border-white/10 shadow-xl
+        hover:bg-white/20 dark:hover:bg-white/10 hover:border-white/30 dark:hover:border-white/20 hover:shadow-2xl hover:scale-[1.02]`}
     >
       <div className={`w-[64px] h-[64px] rounded-full ${styles.flexCenter} bg-dimBlue`}>
         <img src={icon} alt="feature-icon" className="w-[50%] h-[50%] object-contain" />
@@ -32,7 +31,7 @@ const Business = () => (
         Spend Smarter, <br className="sm:block hidden" /> Save Faster.
       </h2>
       <p className={`${styles.paragraph} max-w-[470px] mt-5`}>
-        Expensync helps you stay on top of your financial goals with category-wise budgeting, smart alerts, and seamless syncing. Take charge of your spending—every rupee matters.
+        Budget Buddy helps you stay on top of your financial goals with category-wise budgeting, smart alerts, and seamless syncing. Take charge of your spending—every rupee matters.
       </p>
 
       <Button styles={`mt-10`} />

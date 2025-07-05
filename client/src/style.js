@@ -16,6 +16,13 @@ const styles = {
 
   marginX: "sm:mx-16 mx-6",
   marginY: "sm:my-16 my-6",
+
+  // Glassmorphism styles
+  glassCard: "backdrop-blur-xl bg-white/10 dark:bg-white/5 border border-white/20 dark:border-white/10 shadow-2xl",
+  glassCardHover: "hover:bg-white/20 dark:hover:bg-white/10 hover:border-white/30 dark:hover:border-white/20 hover:shadow-3xl transition-all duration-300",
+  glassModal: "backdrop-blur-2xl bg-white/20 dark:bg-black/20 border border-white/30 dark:border-white/10",
+  glassNavbar: "backdrop-blur-md bg-white/80 dark:bg-slate-900/80 border-b border-white/20 dark:border-slate-700/50",
+  glassButton: "backdrop-blur-md bg-white/20 dark:bg-white/10 border border-white/30 dark:border-white/20 hover:bg-white/30 dark:hover:bg-white/20",
 };
 
 export const layout = {

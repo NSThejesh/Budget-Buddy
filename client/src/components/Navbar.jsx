@@ -18,13 +18,13 @@ const Navbar = () => {
     } transition`;
 
   return (
-    <nav className="bg-white dark:bg-slate-900 shadow-md w-full">
-      <div className="max-w-7xl mx-auto px-6 py-2 flex justify-between items-center">
+    <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-white/80 dark:bg-slate-900/80 border-b border-white/20 dark:border-slate-700/50 shadow-lg">
+      <div className="max-w-7xl mx-auto px-6 py-3 flex justify-between items-center">
         <Link
           to="/home"
           className="text-xl font-extrabold tracking-tight flex items-center bg-gradient-to-r from-[#001f3f] via-cyan-400 to-cyan-200 bg-clip-text text-transparent"
         >
-          <img src="/animations/logo1.png" alt="" className="h-12" /> Expensync
+          <img src="/animations/logo1.png" alt="" className="h-12" /> Budget Buddy
         </Link>
 
         <div className="flex items-center gap-4 md:gap-6">

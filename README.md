@@ -1,10 +1,10 @@
-# 📊 Expensync — Personal Finance Tracker
+# 📊 Budget Buddy — Personal Finance Tracker
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Status](https://img.shields.io/badge/status-active-brightgreen)
 ![Built With](https://img.shields.io/badge/Built%20with-MERN%20Stack-blue)
 
-**Expensync** is a full-stack personal finance tracker built with the **MERN stack**, **Tailwind CSS**, and **Chart.js**. This platform helps users track their **income**, **expenses**, and **budget goals**, offering real-time insights and beautiful visualizations for smarter financial decisions.
+**Budget Buddy** is a full-stack personal finance tracker built with the **MERN stack**, **Tailwind CSS**, and **Chart.js**. This platform helps users track their **income**, **expenses**, and **budget goals**, offering real-time insights and beautiful visualizations for smarter financial decisions.
 
 ---
 
@@ -45,8 +45,8 @@
 ### 📁 Clone Repository
 
 ```bash
-git clone https://github.com/your-username/expensync.git
-cd expensync
+git clone https://github.com/your-username/budget-buddy.git
+cd budget-buddy
 ```
 
 ---
@@ -89,7 +89,7 @@ Open in browser: [http://localhost:3000](http://localhost:3000)
 ## 📊 Live Demo
 
 Check out the live version:  
-👉 [https://expensync.com](https://expensyncj17.vercel.app/)
+👉 [https://budget-buddy.com](https://budget-buddyj17.vercel.app/)
 
 ---
 
@@ -97,7 +97,7 @@ Check out the live version:
 
 ### 🖥️ Dashboard Preview
 
-![Expensync Full Demo](./public/demo.png)
+![Budget Buddy Full Demo](./public/demo.png)
 
 ### 🌞 Light Mode | 🌙 Dark Mode
 
@@ -152,7 +152,7 @@ LinkedIn: [Jitesh Kumar](https://www.linkedin.com/in/jitesh-kumar-2521b7249/)
 
 ## 🙏 Thank You
 
-Thank you for checking out **Expensync**!  
+Thank you for checking out **Budget Buddy**!
 Hope it helps you manage money better and plan smarter 💸
 
 If you found this useful, please ⭐ the repo and share it!

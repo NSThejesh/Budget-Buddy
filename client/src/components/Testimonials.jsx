@@ -8,11 +8,11 @@ const Testimonials = () => (
 
     <div className="w-full flex justify-between items-center md:flex-row flex-col sm:mb-16 mb-6 relative z-[1]">
       <h2 className={styles.heading2}>
-        What our users say about <br className="sm:block hidden" /> Expensync
+        What our users say about <br className="sm:block hidden" /> Budget Buddy
       </h2>
       <div className="w-full md:mt-0 mt-6">
         <p className={`${styles.paragraph} text-left max-w-[450px] text-dimWhite dark:text-dimWhite`}>
-          Thousands of users trust Expensync to track their finances, set budgets, and achieve their financial goals effortlessly.
+          Thousands of users trust Budget Buddy to track their finances, set budgets, and achieve their financial goals effortlessly.
         </p>
       </div>
     </div>

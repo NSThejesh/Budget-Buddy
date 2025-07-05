@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { ArrowDownCircle, ArrowUpCircle } from "lucide-react";
+import { ArrowDownCircle, ArrowUpCircle, CreditCard, Search, Filter } from "lucide-react";
 import TransactionReminders from "./TransactionReminders";
 import Layout from "./Layout";
+import PageHeader from "./PageHeader";
 import { getTransactions } from "../api/api";
 
 const Transactions = () => {
@@ -46,27 +47,35 @@ const Transactions = () => {
 
   return (
     <Layout>
-      <div className="bg-gradient-to-br from-slate-50 to-white dark:from-[#0c0f1c] dark:to-[#1a1d2e] border border-slate-200 dark:border-slate-700 p-6 sm:p-8 md:p-10 rounded-3xl shadow-[0_15px_40px_rgba(0,0,0,0.12)] transition-all duration-500">
-        <h2 className="text-3xl sm:text-4xl font-extrabold text-center text-slate-800 dark:text-white mb-10 tracking-tight leading-snug drop-shadow-sm">
-          💳 Transaction Dashboard
-        </h2>
+      <PageHeader 
+        title="Transactions" 
+        subtitle="View and manage all your financial transactions" 
+        icon={CreditCard}
+        gradient="from-blue-600 via-cyan-600 to-purple-600"
+      />
+      <div className="backdrop-blur-xl bg-white/10 dark:bg-white/5 border border-white/20 dark:border-white/10 p-6 sm:p-8 md:p-10 rounded-3xl shadow-2xl transition-all duration-500">
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-12">
           {/* LEFT SIDE */}
           <div className="flex flex-col">
             <div className="flex flex-col sm:flex-row gap-4 mb-6">
-              <input
-                type="text"
-                placeholder="Search..."
-                className="w-full px-5 py-3 rounded-xl bg-white/90 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-600 focus:ring-2 focus:ring-purple-500 focus:outline-none text-slate-800 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 transition backdrop-blur-md shadow-sm"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-              />
-              <select
-                className="w-full sm:w-60 px-5 py-3 rounded-xl bg-white/90 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-600 focus:ring-2 focus:ring-purple-500 focus:outline-none text-slate-800 dark:text-white transition shadow-sm"
-                value={filter}
-                onChange={(e) => setFilter(e.target.value)}
-              >
+              <div className="relative w-full">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-500 dark:text-gray-400" />
+                <input
+                  type="text"
+                  placeholder="Search transactions..."
+                  className="w-full pl-10 pr-5 py-3 rounded-xl backdrop-blur-md bg-white/20 dark:bg-white/10 border border-white/30 dark:border-white/20 focus:ring-2 focus:ring-blue-500 focus:outline-none text-slate-800 dark:text-white placeholder:text-slate-500 dark:placeholder:text-slate-400 transition-all duration-300 hover:bg-white/30 dark:hover:bg-white/20"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                />
+              </div>
+              <div className="relative w-full sm:w-60">
+                <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-500 dark:text-gray-400" />
+                <select
+                  className="w-full pl-10 pr-5 py-3 rounded-xl backdrop-blur-md bg-white/20 dark:bg-white/10 border border-white/30 dark:border-white/20 focus:ring-2 focus:ring-blue-500 focus:outline-none text-slate-800 dark:text-white transition-all duration-300 hover:bg-white/30 dark:hover:bg-white/20 appearance-none"
+                  value={filter}
+                  onChange={(e) => setFilter(e.target.value)}
+                >
                 <option value="">All Categories</option>
                 <option value="Food">Food</option>
                 <option value="Entertainment">Entertainment</option>
@@ -74,7 +83,8 @@ const Transactions = () => {
                 <option value="Utilities">Utilities</option>
                 <option value="Income">Income</option>
                 <option value="Others">Others</option>
-              </select>
+                </select>
+              </div>
             </div>
 
             {loading && <p>Loading transactions...</p>}
@@ -88,7 +98,7 @@ const Transactions = () => {
                 {filteredTransactions.map((txn) => (
                   <li
                     key={txn._id}
-                    className="flex items-center justify-between bg-gradient-to-tr from-white/60 to-slate-200/60 dark:from-slate-800/60 dark:to-slate-700/60 backdrop-blur-md border border-slate-200 dark:border-slate-700 rounded-2xl px-6 py-4 shadow-sm hover:shadow-[0_12px_30px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300 ease-in-out"
+                    className="flex items-center justify-between backdrop-blur-xl bg-white/20 dark:bg-white/5 border border-white/30 dark:border-white/10 rounded-2xl px-6 py-4 shadow-lg hover:bg-white/30 dark:hover:bg-white/10 hover:shadow-2xl hover:scale-[1.02] transition-all duration-300 ease-in-out"
                   >
                     <div className="flex items-center gap-4">
                       {txn.amount < 0 ? (
@@ -119,7 +129,7 @@ const Transactions = () => {
 
           {/* RIGHT SIDE */}
           <div className="flex flex-col gap-8">
-            <div className="bg-gradient-to-b from-slate-100/60 to-slate-200/60 dark:from-[#0c0f1c] dark:to-[#1a1d2e] p-6 sm:p-8 rounded-3xl shadow-xl border border-slate-200 dark:border-slate-700 h-fit transition-all duration-300 backdrop-blur-sm">
+            <div className="backdrop-blur-xl bg-white/10 dark:bg-white/5 p-6 sm:p-8 rounded-3xl shadow-2xl border border-white/20 dark:border-white/10 h-fit transition-all duration-300 hover:bg-white/20 dark:hover:bg-white/10">
               <h3 className="text-2xl font-bold mb-6 text-slate-800 dark:text-white">
                 Summary:{" "}
                 <span className="text-purple-600 dark:text-purple-400">

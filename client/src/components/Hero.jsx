@@ -1,5 +1,5 @@
 import styles from "../style";
-import { robot } from "../assets"; // Replace with a relevant Expensync image later
+import { robot } from "../assets"; // Replace with a relevant Budget Buddy image later
 import GetStarted from "./GetStarted";
 import { discount } from "../assets";
 
@@ -8,7 +8,7 @@ const Hero = () => {
     <section id="home" className={`flex md:flex-row flex-col ${styles.paddingY}`}>
       <div className={`flex-1 ${styles.flexStart} flex-col xl:px-0 sm:px-16 px-6`}>
         {/* Promo Banner */}
-        <div className="flex flex-row items-center py-[6px] px-4 bg-[rgba(0,246,255,0.1)] dark:bg-[rgba(0,246,255,0.2)] rounded-[10px] mb-2">
+        <div className="flex flex-row items-center py-[6px] px-4 backdrop-blur-md bg-white/20 dark:bg-white/10 border border-white/30 dark:border-white/20 rounded-[10px] mb-2 shadow-lg">
           <p className={`${styles.paragraph} ml-2 text-gray-900 dark:text-gray-100`}>
             <span className="text-cyan-600 dark:text-cyan-400 font-semibold">Track</span> budgets -{" "}
             <span className="text-cyan-600 dark:text-cyan-400 font-semibold">Set</span> goals -{" "}
@@ -28,7 +28,7 @@ const Hero = () => {
         </div>
 
         <h1 className="font-poppins font-semibold ss:text-[68px] text-[52px] text-neutral-900 dark:text-white ss:leading-[100.8px] leading-[75px] w-full">
-          With Expensync.
+          With Budget Buddy.
         </h1>
         <p className={`${styles.paragraph} max-w-[470px] mt-5 text-neutral-700 dark:text-dimWhite`}>
           Manage your budgets, set spending goals, and stay financially aware with a smart and intuitive dashboard. All in real-time.
