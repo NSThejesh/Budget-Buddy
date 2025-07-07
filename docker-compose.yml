@@ -1,9 +1,8 @@
-version: '3.8'
-
 services:
-  # MongoDB Database
+  # MongoDB Database (Cross-platform compatible)
   mongodb:
     image: mongo:6.0
+    platform: linux/amd64  # Ensures compatibility across architectures
     container_name: budget-buddy-mongo
     restart: unless-stopped
     environment:
@@ -17,17 +16,27 @@ services:
     networks:
       - budget-buddy-network
     healthcheck:
-      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      test: |
+        mongosh --quiet --eval 'db.adminCommand("ping")' || 
+        mongo --quiet --eval 'db.adminCommand("ping")' || 
+        echo 'db.adminCommand("ping")' | mongo --quiet
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 40s
 
-  # Budget Buddy Application
+  # Budget Buddy Application (Cross-platform)
   budget-buddy-app:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        BUILDPLATFORM: ${BUILDPLATFORM:-linux/amd64}
+        TARGETPLATFORM: ${TARGETPLATFORM:-linux/amd64}
+        BUILDOS: ${BUILDOS:-linux}
+        BUILDARCH: ${BUILDARCH:-amd64}
+        TARGETOS: ${TARGETOS:-linux}
+        TARGETARCH: ${TARGETARCH:-amd64}
     container_name: budget-buddy-app
     restart: unless-stopped
     environment:
@@ -35,6 +44,8 @@ services:
       PORT: 3001
       MONGO_URI: mongodb://admin:password123@mongodb:27017/budgetbuddy?authSource=admin
       JWT_SECRET: your_super_secret_jwt_key_change_in_production
+      TZ: UTC
+      NODE_OPTIONS: "--max-old-space-size=512"
     ports:
       - "3001:3001"
     depends_on:
@@ -43,11 +54,14 @@ services:
     networks:
       - budget-buddy-network
     healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3001/"]
+      test: |
+        wget --no-verbose --tries=1 --spider http://localhost:3001/api/health || 
+        curl -f http://localhost:3001/api/health || 
+        node -e "require('http').get('http://localhost:3001/api/health', (res) => process.exit(res.statusCode === 200 ? 0 : 1)).on('error', () => process.exit(1))"
       interval: 30s
       timeout: 10s
       retries: 3
-      start_period: 40s
+      start_period: 20s
 
 networks:
   budget-buddy-network:
